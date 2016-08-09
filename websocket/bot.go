@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+var chain = NewChain(2) // 2-word prefixes
+
 // Bot returns an io.ReadWriteCloser that responds to
 // each incoming write with a generated sentence.
 func Bot() io.ReadWriteCloser {
@@ -24,6 +26,6 @@ func (b bot) Write(buf []byte) (int, error) {
 
 func (b bot) speak() {
 	time.Sleep(time.Second)
-	msg := chain.Generate(10) // at most 10 words
-	b.out.Write([]byte(msg))
+	msg := NewBotChatResponse(chain.Generate(10)) // at most 10 words
+	b.out.Write([]byte(msg.String()))
 }

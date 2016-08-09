@@ -87,7 +87,7 @@ var rootTemplate = template.Must(
             button.disabled = 'disabled';
         },
         sendMessage : function(){
-            this.socket.send(JSON.stringify('{"from":"' + uId + '", "message":"' + messageInput.value + '"}'));
+            this.socket.send('{"from":' + JSON.stringify(uId) + ', "message":' + JSON.stringify(messageInput.value) + '}');
             messageInput.value = '';
             this.console.innerHTML = this.console.innerHTML + 'websocket message send <br />';
         }

@@ -36,7 +36,8 @@ func main() {
 }
 
 func match(c io.ReadWriteCloser) {
-	fmt.Fprint(c, "Waiting for a partner...")
+	fmt.Println("lalalalalalala")
+	fmt.Fprint(c, NewServerChatResponse("Waiting for a partner..."))
 	select {
 	case partner <- c:
 		// now handled by the other goroutine
@@ -48,8 +49,8 @@ func match(c io.ReadWriteCloser) {
 }
 
 func chat(a, b io.ReadWriteCloser) {
-	fmt.Fprintln(a, "Found one! Say hi.")
-	fmt.Fprintln(b, "Found one! Say hi.")
+	fmt.Fprintln(a, NewServerChatResponse("Found one! Say hi."))
+	fmt.Fprintln(b, NewServerChatResponse("Found one! Say hi."))
 	errc := make(chan error, 1)
 	go cp(a, b, errc)
 	go cp(b, a, errc)
@@ -64,8 +65,6 @@ func cp(w io.Writer, r io.Reader, errc chan<- error) {
 	_, err := io.Copy(w, r)
 	errc <- err
 }
-
-var chain = NewChain(2) // 2-word prefixes
 
 func socketHandler(ws *websocket.Conn) {
 	r, w := io.Pipe()
