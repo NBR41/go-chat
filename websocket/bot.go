@@ -7,16 +7,16 @@ import (
 
 var chain = NewChain(2) // 2-word prefixes
 
+type bot struct {
+	io.ReadCloser
+	out io.Writer
+}
+
 // Bot returns an io.ReadWriteCloser that responds to
 // each incoming write with a generated sentence.
 func Bot() io.ReadWriteCloser {
 	r, out := io.Pipe() // for outgoing data
 	return bot{r, out}
-}
-
-type bot struct {
-	io.ReadCloser
-	out io.Writer
 }
 
 func (b bot) Write(buf []byte) (int, error) {

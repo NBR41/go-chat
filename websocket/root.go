@@ -43,12 +43,13 @@ var rootTemplate = template.Must(
     var buttonUser = document.getElementsByClassName('sii-chat-login')[0]; /* bouton de soumission du pseudo */
     var contentMessage = document.getElementsByClassName('sii-chat-content')[0]; /* div contenant les messages reçus par le serveur*/
     var WebsocketClass = function(host){
-        this.socket = new WebSocket(host);
+        this.host = host
         this.console = document.getElementsByClassName('console')[0];
     };
     WebsocketClass.prototype = {
         initWebsocket : function(){
             var $this = this;
+            this.socket = new WebSocket(this.host);
             this.socket.onopen = function(){
                 $this.onOpenEvent(this);
             };
@@ -88,6 +89,8 @@ var rootTemplate = template.Must(
         },
         sendMessage : function(){
             this.socket.send('{"from":' + JSON.stringify(uId) + ', "message":' + JSON.stringify(messageInput.value) + '}');
+            contentMessage.innerHTML = contentMessage.innerHTML + '><strong>' + uId + '</strong> : ' + messageInput.value + '<br />';
+            contentMessage.scrollTop = contentMessage.scrollHeight; /* to auto scroll at the bottom */
             messageInput.value = '';
             this.console.innerHTML = this.console.innerHTML + 'websocket message send <br />';
         }

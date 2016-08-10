@@ -25,3 +25,22 @@ func NewServerChatResponse(message string) *ChatResponse {
 func NewBotChatResponse(message string) *ChatResponse {
 	return &ChatResponse{From: "Bot", Message: message}
 }
+
+type BotChatWriter struct {
+	chain *Chain
+}
+
+func NewBotChatWriter(chain *Chain) *BotChatWriter {
+	return &BotChatWriter{chain}
+}
+
+func (c *BotChatWriter) Write(in []byte) (int, error) {
+	var cr ChatResponse
+	var err = json.Unmarshal(in, &cr)
+	if nil != err {
+		log.Println("unable to json unmarshall: " + string(in[:]))
+		return 0, err
+	}
+	c.chain.Write([]byte(cr.Message))
+	return len(in), nil
+}
