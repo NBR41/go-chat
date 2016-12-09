@@ -92,8 +92,8 @@ func (c *Chain) Save(fileName string) error {
 	}
 	// close fo on exit and check for its returned error
 	defer func() {
-		if err := fo.Close(); err != nil {
-			panic(err)
+		if errClose := fo.Close(); err != nil {
+			panic(errClose)
 		}
 	}()
 
@@ -119,8 +119,8 @@ func (c *Chain) Load(fileName string) error {
 	}
 	// close fi on exit and check for its returned error
 	defer func() {
-		if err := fi.Close(); err != nil {
-			panic(err)
+		if errClose := fi.Close(); err != nil {
+			panic(errClose)
 		}
 	}()
 
